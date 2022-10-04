@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap");
+
+body{
+    margin-left: 300px;
+    margin-right: 300px;
+    background-color: whitesmoke;
+    align-items:end;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    
+}
+
+#header {
+    margin-top: 40px;
+    
+}
+
+.contact article{
+    
+    flex-direction: column;
+    align-items: right;
+}
+
+.occupation{
+    font-size: larger;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+
+.download{
+    margin-right: 100px;
+    background-color: gray;
+    color: white;
+    border-color: transparent;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: left;
+    font-size: 15.5px;
+    height: 30px;
+    width: 150px;
+    margin-bottom: 5px;
+}
+
+.i-text{
+    font-style: italic;
+    padding: 25px;
+    font-size: larger;
+}
+
+.summary-text{
+    font-size: larger;
+    padding-top: 25px;
+    padding-bottom: 15px;
+}
+
+.design{
+    padding: 25px;
+}
+
+.design-header {
+    padding-bottom: 15px;
+    font-size: 23px;
+}
+
+.techskills{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.experience{
+    padding-top: 20px;
+}
+.company{
+    font-size: 22px;
+}
+
+.job{
+    font-size: large;
+}
+
+.work-summary{
+    padding-top: 10px;
+    padding-bottom: 40px;
+}
+
+
+
+.table-divider{
+    margin-top: px;
+    margin-bottom: px;
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-container {
+    display: flex;
+    
+}
