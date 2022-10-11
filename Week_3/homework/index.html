@@ -9,7 +9,49 @@
 
 <body>
 	<div id='main-container'>
-		<div id='weather-container'>
+		<div id='weather-container' class="hidden">
+			<div id="date">
+				
+			</div>
+			<div id="weather-for-city">
+				
+			</div>
+			<div class="current-container">
+				<div id="info-display">
+					<div id="city-weather"></div>
+					<div id="description"></div>
+					<div id="temp"></div>
+					<div id="air-quality"></div>
+				</div>
+				<img id="weather-img" alt="Sunny">
+			</div>
+			<div id="weekly-weather">
+				<div class = "weather-box">
+					<div class = "weather-box-date" id = "box-date-1"></div>
+					<img class = "weather-box-img" id = "box-img-1" src="" alt="sunny">
+					<div class = "weather-box-temp" id="box-temp-1"></div>
+				</div>
+				<div class = "weather-box">
+					<div class = "weather-box-date" id = "box-date-2"></div>
+					<img class = "weather-box-img" id = "box-img-2" src="" alt="sunny">
+					<div class = "weather-box-temp" id="box-temp-2"></div>
+				</div>
+				<div class = "weather-box">
+					<div class = "weather-box-date" id = "box-date-3"></div>
+					<img class = "weather-box-img" id = "box-img-3" src="" alt="sunny">
+					<div class = "weather-box-temp" id="box-temp-3"></div>
+				</div>
+				<div class = "weather-box">
+					<div class = "weather-box-date" id = "box-date-4"></div>
+					<img class = "weather-box-img" id = "box-img-4" src="" alt="sunny">
+					<div class = "weather-box-temp" id="box-temp-4"></div>
+				</div>
+				<div class = "weather-box">
+					<div class = "weather-box-date" id = "box-date-5"></div>
+					<img class = "weather-box-img" id = "box-img-5" src="" alt="sunny">
+					<div class = "weather-box-temp" id="box-temp-5"></div>
+				</div>
+			</div>
 		</div> 
 	</div>
 	<div id='side-container'>
@@ -23,7 +65,7 @@
 
 <script>
 		// USE YOUR OWN API KEY
-		const apiKey = "";
+		const apiKey = "6dc87f0d902ad7e89bffc74e3ba537ef";
 
         // variable that stores the city that is chosen
 		let city;
@@ -100,6 +142,68 @@
 				lon: lon
 			}
             // BEGIN CODING HERE
+			const test = document.querySelector('#weather-container')
+			test.classList.remove("hidden");
+
+			var newElement = document.querySelector('#weather-for-city')
+			newElement.innerHTML = "Weather for " + city.fullName
+			var newElement = document.querySelector('#date')
+			newElement.innerHTML = formatDate();
+			
+			let apiCall = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
+				// calls the API
+				fetch(apiCall)
+					.then((response) => 
+						// after recieving a response, take the response from the server and convert it to JSON 
+						response.json()
+					)
+					.then((data) => {
+						let temp = document.querySelector('#temp')
+						temp.innerHTML = data.list[0].main.temp+"°F"
+
+						let main = document.querySelector('#city-weather')
+						main.innerHTML = data.list[0].weather[0].main
+
+						let description = document.querySelector('#description')
+						description.innerHTML = data.list[0].weather[0].description
+						document.getElementById("weather-img").src = 'icons/'+data.list[0].weather[0].icon+'.svg'
+						
+						let hours = 0
+						for (let i = 0; i < 5; i++){
+							let max_temp = data.list[hours].main.temp
+							let min_temp = data.list[hours].main.temp
+							let box_img = "02d.svg"
+							for (let j = 0; j < 8; j++){
+								if (data.list[hours].main.temp > max_temp){
+									max_temp = data.list[hours].main.temp
+								}
+								if (data.list[hours].main.temp < min_temp){
+									max_temp = data.list[hours].main.temp
+								}
+								if (j == 0){
+									box_img = data.list[hours].weather[0].icon
+								}
+								max_temp = Math.floor(max_temp)
+								min_temp = Math.round(min_temp)
+								hours++;
+								document.getElementById("box-date-"+(i+1)).innerHTML = formatDate(i+1)
+								document.getElementById("box-temp-"+(i+1)).innerHTML = max_temp+"°F to "+min_temp+"°F"
+								document.getElementById("box-img-"+(i+1)).src = 'icons/'+box_img+'.svg'
+							}
+						}
+						
+					});
+
+
+			let api2Call = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+				fetch(api2Call)
+					.then((response) =>
+						response.json()
+					)
+					.then((data) => {
+						document.getElementById("air-quality").innerHTML = 'AQI: '+data.list[0].main.aqi
+					})
+					
 		}
 	</script>
 </html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping list example</title>
+    <style>
+      li {
+        margin-bottom: 10px;
+      }
+
+      li button {
+        font-size: 8px;
+        margin-left: 20px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>My shopping list</h1>
+
+    <div>
+      <label for="item">Enter a new item:</label>
+      <input type="text" name="item" id="item">
+      <button onclick="addtoList()" id="add-button">Add item</button>
+    </div>
+
+    <ul id="Shopping-List">
+
+    </ul>
+
+    <script>
+        function addtoList(){
+          const localStorageList = localStorage.getItem("shoppingList")
+          
+          if(localStorageList){
+            const deSerialized = JSON.parse(localStorageList)
+            deSerialized.forEach(elem =>{addtoList(elem)})
+          }
+
+          const list = document.querySelector("ul")
+          const list_item = document.createElement("li")
+          const text_item = document.getElementById("item")
+          const deleteButton = document.createElement("button")
+          const saveButton = document.createElement("button")
+          deleteButton.innerText = "Delete"
+          saveButton.innerText = "Save"
+
+
+          //Add new event to list
+          list_item.innerText = text_item.value;
+          list_item.appendChild(deleteButton)
+          list_item.appendChild(saveButton)
+          text_item.value = ""
+          list.appendChild(list_item)
+          text_item.focus()
+
+          deleteButton.addEventListener('click', ()=>{
+            list.removeChild(list_item)
+          })
+
+          saveButton.addEventListener('click', ()=>{
+            const localStorageList = localStorage.getItem("shoppingList")
+            if (!localStorageList){
+              localStorage
+            }
+          })
+        }
+
+    </script>
+  </body>
+</html>
