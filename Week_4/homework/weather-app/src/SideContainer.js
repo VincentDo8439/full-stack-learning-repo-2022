@@ -51,6 +51,7 @@ function SideContainer(childToParent) {
         })	
     }
 
+    //function in SideContainer.js
     function selectCity(fullName, name, state, lat, lon) {
         // hides the search-results-list since it is not needed right now
         document.querySelector('#search-results-list').className = 'hidden'
@@ -63,6 +64,7 @@ function SideContainer(childToParent) {
             lat: lat,
             lon: lon
         }
+        //i want this function to ship data to the parent
         childToParent(city);
     }
 

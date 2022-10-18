@@ -21,7 +21,7 @@ function WeatherHeader(props) {
 				{props.date}
             </div>
             <div id="weather-for-city">
-                    Weather for Katy, Texas
+                    Weather for {props.data.fullName}
             </div>
             <div class="current-container">
                 <div id="info-display">
