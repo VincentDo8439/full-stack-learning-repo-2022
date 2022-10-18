@@ -1,0 +1,58 @@
+#date {
+    font-family: Arial;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    padding-left: 40px;
+  }
+
+  #weather-for-city{
+    font-family: Arial;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 38px;
+    padding-left: 40px;
+  }
+  
+  .current-container{
+    display: flex;
+  }
+
+  #info-display{
+    padding: 40px;
+  }
+
+  #city-weather{
+    font-family: Arial;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+  }
+
+  #description{
+    font-family: Arial;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+  }
+
+  #temp{
+    font-family: Arial;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 72px;
+  }
+
+  #air-quality{
+    font-family: Arial;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  #weather-img{
+    padding: 20px;
+    width: 200px;
+    height: 200px;
+  }
