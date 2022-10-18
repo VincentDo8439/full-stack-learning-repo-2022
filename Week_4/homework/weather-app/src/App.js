@@ -9,14 +9,15 @@ function App() {
 
   const [data, setData] = useState('');
 
-  const childToParent = (childData) => {
+  const handleDataChange = (childData) => {
    setData(childData)
+   console.log("data was transferred")
   }
 
   return (
     <div className="App">
       <MainContainer data={data} apiKey={myApiKey}></MainContainer>
-      <SideContainer childToParent={childToParent} apiKey={myApiKey}/>
+      <SideContainer handleChange={handleDataChange} apiKey={myApiKey}/>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import './SideContainer.css'
 import React from 'react';
 
-function SideContainer(childToParent) {
+function SideContainer(props) {
 
     // variable that stores the city that is chosen
     let city;
@@ -12,7 +12,7 @@ function SideContainer(childToParent) {
 			let searchInput = document.querySelector("#search-input").value;
 			if (searchInput) {
 				// creates the API call with the value from the search input as a query
-				let apiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${searchInput},,US&limit=5&appid=${childToParent.apiKey}`;
+				let apiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${searchInput},,US&limit=5&appid=${props.apiKey}`;
 				// calls the API
 				fetch(apiCall)
 					.then((response) => 
@@ -57,15 +57,9 @@ function SideContainer(childToParent) {
         document.querySelector('#search-results-list').className = 'hidden'
         // sets the global city variable
         document.querySelector("#search-input").value = ''
-        city = {
-            fullName: fullName,
-            name: name,
-            state: state,
-            lat: lat,
-            lon: lon
-        }
+        city = [fullName, name, state, lat, lon]
         //i want this function to ship data to the parent
-        childToParent(city);
+        props.handleChange(city);
     }
 
     return (

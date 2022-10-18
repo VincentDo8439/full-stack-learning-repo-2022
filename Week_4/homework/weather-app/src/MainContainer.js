@@ -13,9 +13,9 @@ function MainContainer(props) {
         return output
     }
 
-    let tempRanges;
+    let tempRanges = [];
 
-    let apiCall = `https://api.openweathermap.org/data/2.5/forecast?lat=${props.data.lat}&lon=${props.data.lon}&appid=${props.apiKey}&units=imperial`;
+    let apiCall = `https://api.openweathermap.org/data/2.5/forecast?lat=${props.data[3]}&lon=${props.data[4]}&appid=${props.apiKey}&units=imperial`;
 				// calls the API
 				fetch(apiCall)
 					.then((response) => 
@@ -23,6 +23,17 @@ function MainContainer(props) {
 						response.json()
 					)
 					.then((data) => {
+                        let temp = document.querySelector('#temp')
+						temp.innerHTML = data.list[0].main.temp+"°F"
+
+						let main = document.querySelector('#city-weather')
+						main.innerHTML = data.list[0].weather[0].main
+
+						let description = document.querySelector('#description')
+						description.innerHTML = data.list[0].weather[0].description
+						// document.getElementById("weather-img").src = 'icons/'+data.list[0].weather[0].icon+'.svg'
+
+
 						let hours = 0
 						for (let i = 0; i < 5; i++){
 							let max_temp = data.list[hours].main.temp
@@ -41,26 +52,32 @@ function MainContainer(props) {
 								max_temp = Math.floor(max_temp)
 								min_temp = Math.round(min_temp)
 								hours++;
-                                tempRanges.maxTemp1 = max_temp
-                                tempRanges.minTemp1 = min_temp
-								document.getElementById("box-date-"+(i+1)).innerHTML = formatDate(i+1)
-								document.getElementById("box-temp-"+(i+1)).innerHTML = max_temp+"°F to "+min_temp+"°F"
-								document.getElementById("box-img-"+(i+1)).src = 'icons/'+box_img+'.svg'
+                                tempRanges[(i*2)] = min_temp
+                                tempRanges[(i*2)+1] = max_temp
+								//document.getElementById("box-img-"+(i+1)).src = 'icons/'+box_img+'.svg'
 							}
 						}
 					});
-
-    //i want to be able to access lat, lon which was set in SideContainer.js
+    let api2Call = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${props.data[3]}&lon=${props.data[4]}&appid=${props.apiKey}`;
+    fetch(api2Call)
+        .then((response) =>
+            response.json()
+        )
+        .then((data) => {
+            document.getElementById("air-quality").innerHTML = 'AQI: '+data.list[0].main.aqi
+        })
+    console.log(tempRanges)
+    //let min_temp1 = tempRanges[0];
     return (
         <div id='main_container'>
             <div id='weather-container'>
-                <WeatherHeader data= {props.data} apiKey={props.apiKey} date={formatDate(0)}></WeatherHeader>
+                <WeatherHeader data={props.data} apiKey={props.apiKey} date={formatDate(0)}></WeatherHeader>
                 <div id='weekly-weather'>
-                    <WeatherCard data={props.data} apiKey={props.apiKey} date={formatDate(1)} minTemp="72" maxTemp="83"></WeatherCard>
-                    <WeatherCard date={formatDate(2)} minTemp="72" maxTemp="83"></WeatherCard>
-                    <WeatherCard date={formatDate(3)} minTemp="72" maxTemp="83"></WeatherCard>
-                    <WeatherCard date={formatDate(4)} minTemp="72" maxTemp="83"></WeatherCard>
-                    <WeatherCard date={formatDate(5)} minTemp="72" maxTemp="83"></WeatherCard>
+                    <WeatherCard date={formatDate(1)} minTemp={tempRanges[0]} maxTemp={tempRanges[1]}></WeatherCard>
+                    <WeatherCard date={formatDate(2)} minTemp={tempRanges[2]} maxTemp={tempRanges[3]}></WeatherCard>
+                    <WeatherCard date={formatDate(3)} minTemp={tempRanges[4]} maxTemp={tempRanges[5]}></WeatherCard>
+                    <WeatherCard date={formatDate(4)} minTemp={tempRanges[6]} maxTemp={tempRanges[7]}></WeatherCard>
+                    <WeatherCard date={formatDate(5)} minTemp={tempRanges[8]} maxTemp={tempRanges[9]}></WeatherCard>
                 </div>
             </div>
             
