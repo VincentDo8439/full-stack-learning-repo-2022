@@ -13,7 +13,7 @@ function MainContainer(props) {
         return output
     }
 
-    let tempRanges = [];
+    var tempRanges = [];
 
     let apiCall = `https://api.openweathermap.org/data/2.5/forecast?lat=${props.data[3]}&lon=${props.data[4]}&appid=${props.apiKey}&units=imperial`;
 				// calls the API
