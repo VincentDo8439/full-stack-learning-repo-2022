@@ -8,8 +8,7 @@ app.post("/tweets", async (req, res) => {});
 
 // Gets all Tweets
 app.get("/", async (req, res) => {
-  const twitter = db.collection("tweets");
-
+  const twitter = db.collection("Tweets");
   const tweets = await twitter.get(); // Since async operation, use await
   const ret = tweets.docs.map((data) => data.data());
 
@@ -18,7 +17,7 @@ app.get("/", async (req, res) => {
 
 // Gets all tweets from today
 app.get("/tweets/today", async (req, res) => {
-  const twitter = db.collection("tweets");
+  const twitter = db.collection("Tweets");
 
   var d = new Date();
   d.setDate(d.getDate() - 1);
@@ -29,6 +28,13 @@ app.get("/tweets/today", async (req, res) => {
 });
 
 //TODO: Get all tweets by person id
+app.get("/tweets/:user_id", async (req, res) => {
+  const twitter = db.collection("Tweets")
+  let user = req.params.user_id
+  const query = await twitter.where("user", "==", user).get();
+  const ret = query.docs.map((data) => data.data())
+  res.status(200).json(ret)
+});
 
 //TODO: Create a tweet
 

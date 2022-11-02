@@ -13,4 +13,4 @@ app.get("/", (req, res) => {
 });
 
 // TODO: we are currently listening to port 3000, lets define an environment variable and use that instead
-app.listen(3000, () => console.log("App listening on port 3000"));
+app.listen(5000, () => console.log("App listening on port "+process.env.PORT));
