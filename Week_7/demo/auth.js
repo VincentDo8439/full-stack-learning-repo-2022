@@ -20,7 +20,7 @@ function authMiddleware(req, res, next) {
     // Check if first argument is Bearer
     if (headers.length === 2 && headers[0] === "Bearer") {
       // TODO: get the token
-      let token = "";
+      let token = headers[1];
       try {
         let decodedToken = jwt.verify(token, JWTSECRET);
         // Set user object which can be accessed in the req
@@ -43,7 +43,7 @@ app.post("/register", async (req, res) => {
   const { username, password } = req.body;
   // hash the password
   const passHashed = pbk
-    .pbkdf2Sync(password, "SALT", 100, 32, "sha256")
+    .pbkdf2Sync(password, SALT, 100, 32, "sha256")
     .toString();
   // Check for duplicate users
   const check = await db.collection("user").doc(username).get();
@@ -51,8 +51,11 @@ app.post("/register", async (req, res) => {
     return res.status(400).json({ msg: "User exists" });
   }
   // TODO: Create the User and fill in user and token
-  const user = "";
-  const token = "";
+  db.collection("users").doc(username).set({
+    username: username,
+    token: hashedPassword,
+  });
+  const token = jwt.sign(user, JWTSECRET);
 
   // Send JWT Token
   res.json({
@@ -67,7 +70,7 @@ app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   // TODO: hash the password
   const passHashed = pbk
-    .pbkdf2Sync(password, "SALT", 100, 32, "sha256")
+    .pbkdf2Sync(password, SALT, 100, 32, "sha256")
     .toString();
   // Get the user
   const check = await db.collection("user").doc(username).get();
@@ -78,10 +81,10 @@ app.post("/login", async (req, res) => {
   // Cross reference the stored password with the incoming password (hashed)
   const user = check.data();
   // TODO: fill in samepassword
-  let samePassword = false;
+  let samePassword = passHashed == password;
   if (samePassword) {
     // TODO: Issue token if passwords match, else, return a 401, not authorized
-    const token = ""
+    const token = jwt.sign(user, JWTSECRET)
     return res.json({
       msg: "successfully logged in",
       data: { username: username },
