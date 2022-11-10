@@ -18,43 +18,85 @@ import {
   Input,
   Button,
   Checkbox,
-  Title
+  Title,
 } from "@mantine/core";
+import { useWindowScroll } from "@mantine/hooks";
 
 export default function HomePage() {
   // toDo: an array of tasks that need to be done; setToDo: a function that allows you to modify the task variable.
-  const [tasks, setTasks] = useState([
-    { name: "create a todo app", finished: false },
-    { name: "wear a mask", finished: false },
-    { name: "play roblox", finished: false },
-    { name: "be a winner", finished: true },
-    { name: "become a tech bro", finished: true }
-  ]);
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const getTasks = async () => {
+      await fetch(
+        `http://localhost:4000/todolist/${window.localStorage.getItem(
+          "username"
+        )}`,
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3000",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setTasks(data);
+        });
+    };
+    getTasks();
+  }, []);
 
   // taskName: a string of the name of task that you want to add; setToDo: a function that allows you to edit the taskName
   const [taskName, setTaskName] = useState("");
 
   // addTask: adds a task to toDo by adding the taskName
-  function addTask() {
+  async function addTask() {
     // makes sure that taskName is not blank
     if (taskName) {
       // makes sure that taskName is a new task
-      tasks.includes(taskName)
-        ? alert("Task already exists")
-        : setTasks(tasks.concat({ name: taskName, completed: false }));
+      if (tasks.includes(taskName)) alert("Task already exists");
+      else {
+        const newTask = {
+          task: taskName,
+          completed: false,
+          user: window.localStorage.getItem("username"),
+        };
+        setTasks(tasks.concat(newTask));
+        await fetch(`http://localhost:4000/`, {
+          method: "POST",
+          body: JSON.stringify(newTask),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
       setTaskName("");
     }
   }
 
-  function updateTask(name) {
+  function filterTasks(task, name) {
+    return task.name != name;
+  }
+
+  async function updateTask(name) {
+    let taskDelete;
     setTasks(
       tasks.map((task) => {
         if (task.name === name) {
           task.finished = !task.finished;
+          taskDelete = task;
         }
         return task;
       })
-    );
+    )
+    //  await fetch(`http://localhost:4000/`, {
+    //   method: 'DELETE',
+    //   body: JSON.stringify({id: taskDelete.id}),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   }
+    // })
   }
 
   function getSummary() {
@@ -90,10 +132,10 @@ export default function HomePage() {
         {tasks.map((task, index) => (
           <Checkbox
             checked={task.finished}
-            key={task.name}
+            key={task.task}
             index={index}
-            label={task.name}
-            onChange={() => updateTask(task.name)}
+            label={task.task}
+            onChange={() => updateTask(task.task)}
           ></Checkbox>
         ))}
       </Stack>

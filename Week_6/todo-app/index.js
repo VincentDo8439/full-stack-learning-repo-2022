@@ -1,10 +1,12 @@
-/** Twitter Demo */
+/** Todo-List App */
 const firebase = require("./firebase");
 const express = require("express")
 const app = require("express")();
 const db = firebase.firestore;
 require("dotenv").config();
 app.use(express.json())
+const cors = require('cors')
+app.use(cors())
 app.post("/todolist", async (req, res) => {});
 
 // Gets all tasks
@@ -21,13 +23,16 @@ app.get("/todolist/:user_id", async (req, res) => {
   const list = db.collection("todolist");
   let user = req.params.user_id;
   const query = await list.where("user", "==", user).get();
-  const ret = query.docs.map((data) => data.data());
+  const ret = query.docs.map((data) => {
+    return { ...data.data(), id: data.id }
+  });
   res.status(200).json(ret);
 });
 
 //TODO: Create a task
 app.post("/", async (req, res) => {
   const task = req.body
+  console.log(task)
   db.collection("todolist").add({
     user: task.user,
     completed: false,
