@@ -32,7 +32,6 @@ app.get("/todolist/:user_id", async (req, res) => {
 //TODO: Create a task
 app.post("/", async (req, res) => {
   const task = req.body
-  console.log(task)
   db.collection("todolist").add({
     user: task.user,
     completed: false,
@@ -43,7 +42,11 @@ app.post("/", async (req, res) => {
     task: task.task,
     complete: false,
   };
-  res.json({ msg: "Success", data: task_obj });
+  const query = await db.collection("todolist").where("task", "==", task.task).get();
+  const ret = query.docs.map((data) => {
+    return {msg: "Success", data: task_obj, id: data.id}
+  });
+  res.json(ret);
 });
 
 //TODO: check-off/delete a task

@@ -40,7 +40,6 @@ export default function HomePage() {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           setTasks(data);
         });
     };
@@ -49,6 +48,7 @@ export default function HomePage() {
 
   // taskName: a string of the name of task that you want to add; setToDo: a function that allows you to edit the taskName
   const [taskName, setTaskName] = useState("");
+  const [newId, setId] = useState("");
 
   // addTask: adds a task to toDo by adding the taskName
   async function addTask() {
@@ -57,52 +57,54 @@ export default function HomePage() {
       // makes sure that taskName is a new task
       if (tasks.includes(taskName)) alert("Task already exists");
       else {
-        const newTask = {
+        let newTask = ({
           task: taskName,
           completed: false,
           user: window.localStorage.getItem("username"),
-        };
-        setTasks(tasks.concat(newTask));
+        });
         await fetch(`http://localhost:4000/`, {
           method: "POST",
           body: JSON.stringify(newTask),
           headers: {
             "Content-Type": "application/json",
           },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          newTask = {...newTask, id: data[0].id}
         });
+        console.log(newTask)
+        setTasks(tasks.concat(newTask));
       }
       setTaskName("");
     }
-  }
-
-  function filterTasks(task, name) {
-    return task.name != name;
   }
 
   async function updateTask(name) {
     let taskDelete;
     setTasks(
       tasks.map((task) => {
-        if (task.name === name) {
-          task.finished = !task.finished;
+        if (task.task === name) {
+          task.completed = !task.completed;
           taskDelete = task;
         }
         return task;
       })
     )
-    //  await fetch(`http://localhost:4000/`, {
-    //   method: 'DELETE',
-    //   body: JSON.stringify({id: taskDelete.id}),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   }
-    // })
+    console.log(taskDelete)
+     await fetch(`http://localhost:4000/`, {
+      method: 'DELETE',
+      body: JSON.stringify({id: taskDelete.id}),
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
   }
 
   function getSummary() {
     let unfinishedTasks = 0;
     tasks.forEach((task) => {
-      if (task.finished === false) {
+      if (task.completed === false) {
         unfinishedTasks += 1;
       }
     });
@@ -131,7 +133,7 @@ export default function HomePage() {
       <Stack>
         {tasks.map((task, index) => (
           <Checkbox
-            checked={task.finished}
+            checked={task.completed}
             key={task.task}
             index={index}
             label={task.task}

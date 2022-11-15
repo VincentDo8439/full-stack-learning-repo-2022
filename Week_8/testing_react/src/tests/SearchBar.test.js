@@ -40,6 +40,9 @@ describe("Search Button", () => {
       const buttonInput = queryByTestId("search-button");
 
       // TODO: write code
+      fireEvent.change(searchInput, { target: { value: "abc" } });
+      fireEvent.click(buttonInput);
+      expect(requestSearch).toHaveBeenCalled();
     });
   });
 });
