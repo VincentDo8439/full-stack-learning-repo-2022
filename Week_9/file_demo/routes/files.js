@@ -72,6 +72,13 @@ files.post("/disk", multer().single("demo_image"), async (req, res) => {
 files.post("/multi", multer().array("demo_image", 3), async (req, res) => {
   //TODO
   const files = req.files;
+
+  if (files !== undefined) {
+    files.forEach(async (file) => {
+      await bucket.file(req.file.originalname).save(req.file.buffer);
+    });
+    return res.status(201).json({ msg: "Successful Uploaded" });
+  }
   return res.status(400).json({ msg: "File could not be loaded" });
 });
 
@@ -81,7 +88,16 @@ files.post("/multi", multer().array("demo_image", 3), async (req, res) => {
 */
 files.get("/list", async (req, res) => {
   //TODO
-  return res.status(400).json({ msg: "File could not be loaded" });
+  const resp = await bucket.getFiles();
+  const files = resp[0];
+  const list = files.map((file) => {
+    return {
+      name: file.name,
+      size: file.metadata.size,
+      type: file.metadata.contentType,
+    };
+  });
+  return res.json({ data: list });
 });
 
 module.exports = files;

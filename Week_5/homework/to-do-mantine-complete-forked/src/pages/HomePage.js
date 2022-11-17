@@ -67,6 +67,7 @@ export default function HomePage() {
           body: JSON.stringify(newTask),
           headers: {
             "Content-Type": "application/json",
+            "authorization": `Bearer ${window.localStorage.getItem("token")}`
           },
         })
         .then((response) => response.json())
