@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment, useContext } from "react";
+import { useEffect, useState, Fragment, useContext, React } from "react";
 import { useForm } from "@mantine/form";
 import AuthContext from "../contexts/AuthContext";
 
@@ -53,8 +53,13 @@ export default function LoginPage() {
     auth.login(values, form);
   }
 
+  function handleRegister(values) {
+    console.log(form, values);
+    auth.register(values, form);
+  }
+
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
       <Stack align="center" justify="center" p="xl">
         <Title order={1}>Login</Title>
         <TextInput
@@ -76,5 +81,8 @@ export default function LoginPage() {
         </Group>
       </Stack>
     </form>
+    
+    
+    
   );
 }

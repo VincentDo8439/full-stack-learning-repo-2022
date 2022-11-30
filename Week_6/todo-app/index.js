@@ -121,7 +121,7 @@ app.post("/register", async (req, res) => {
   // Send JWT Token
   res.json({
     msg: "successfully created",
-    data: { username: username },
+    username: username,
     token: token,
   });
 });
