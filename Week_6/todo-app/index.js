@@ -9,6 +9,8 @@ const cors = require('cors')
 app.use(cors())
 const pbk = require("pbkdf2");
 const jwt = require("jsonwebtoken");
+const files_routes = require("./routes/files");
+app.use("/files", files_routes);
 
 // Should be stored in environment variable, but ok for this demo
 const SALT = ";asf;klsadfllsfjalskdfjl";
@@ -107,7 +109,7 @@ app.post("/register", async (req, res) => {
     .pbkdf2Sync(password, SALT, 100, 32, "sha256")
     .toString();
   // Check for duplicate users
-  const check = await db.collection("user").doc(username).get();
+  const check = await db.collection("users").doc(username).get();
   if (check.exists) {
     return res.status(400).json({ msg: "User exists" });
   }

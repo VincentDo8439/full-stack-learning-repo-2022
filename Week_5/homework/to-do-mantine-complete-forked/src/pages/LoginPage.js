@@ -59,7 +59,6 @@ export default function LoginPage() {
   }
 
   return (
-      <form onSubmit={form.onSubmit(handleSubmit)}>
       <Stack align="center" justify="center" p="xl">
         <Title order={1}>Login</Title>
         <TextInput
@@ -76,13 +75,12 @@ export default function LoginPage() {
           required
           {...form.getInputProps("password")}
         />
+        {auth.errorMessage && <div>{auth.errorMessage}</div> }
         <Group position="center">
-          <Button type="submit">Login</Button>
+          <Button type="submit" onClick={form.onSubmit(handleSubmit)}>Login</Button>
+          <Button type="file" onClick={form.onSubmit(handleRegister)}>Register</Button>
         </Group>
       </Stack>
-    </form>
-    
-    
     
   );
 }

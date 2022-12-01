@@ -14,6 +14,7 @@ export function useProvideAuth() {
   const [loggedIn, setLoggedIn] = useState(
     window.localStorage.getItem("loggedIn") === "true"
   );
+  const [errorMessage, setErrorMessage] = useState(false)
 
   async function login(values, form) {
     await fetch("http://localhost:4000/login", {
@@ -33,11 +34,13 @@ export function useProvideAuth() {
           const json = data.json();
           return json;
         } else {
+          setErrorMessage("Login Information Invalid")
           throw Error("Invalid");
         }
       })
       .then((json) => {
         setLoggedIn(true);
+        setErrorMessage("")
         window.localStorage.setItem("loggedIn", true);
         window.localStorage.setItem("username", json.username);
         window.localStorage.setItem("token", json.token); // Should be sent upon subsequent requests
@@ -66,10 +69,12 @@ export function useProvideAuth() {
           const json = data.json();
           return json;
         } else {
+          setErrorMessage("User Already Exists")
           throw Error("Invalid");
         }
       })
       .then((json) => {
+        setErrorMessage("")
         setLoggedIn(true);
         window.localStorage.setItem("loggedIn", true);
         window.localStorage.setItem("username", json.username);
@@ -90,6 +95,7 @@ export function useProvideAuth() {
     register,
     loggedIn,
     login,
-    logout
+    logout,
+    errorMessage,
   };
 }

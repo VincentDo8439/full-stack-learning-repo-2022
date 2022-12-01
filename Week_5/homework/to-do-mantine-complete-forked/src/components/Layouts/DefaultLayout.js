@@ -52,6 +52,7 @@ export default function DefaultLayout() {
         <Button variant="light" color="red" onClick={() => auth.logout()}>
           Logout
         </Button>
+        
       </Group>
     </Group>
   );
